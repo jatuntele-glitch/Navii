@@ -25,12 +25,9 @@ body{
   background:white;
   animation:twinkle 2s infinite alternate;
 }
-@keyframes twinkle{
-  from{opacity:0.2;}
-  to{opacity:1;}
-}
+@keyframes twinkle{from{opacity:.2;}to{opacity:1;}}
 
-/* glass card */
+/* card */
 .card{
   backdrop-filter:blur(15px);
   background:rgba(255,255,255,0.08);
@@ -42,20 +39,8 @@ body{
   box-shadow:0 0 40px rgba(255,0,120,0.4);
 }
 
-/* hidden */
 .hidden{display:none;}
 
-/* typing */
-.typing{
-  border-right:2px solid pink;
-  white-space:nowrap;
-  overflow:hidden;
-  width:0;
-  animation:typing 4s steps(30,end) forwards;
-}
-@keyframes typing{to{width:100%;}}
-
-/* buttons */
 button{
   margin-top:12px;
   padding:12px 22px;
@@ -67,10 +52,8 @@ button{
   cursor:pointer;
 }
 
-/* NO button moving */
-#noBtn{
-  position:relative;
-}
+/* moving NO */
+#noBtn{position:relative;}
 
 /* love msg */
 #loveMsg{
@@ -78,6 +61,35 @@ button{
   font-size:22px;
   margin-top:15px;
   color:#ff6b9a;
+}
+
+/* 💍 ring animation */
+#ring{
+  position:fixed;
+  font-size:80px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  animation:ringPop .8s forwards;
+}
+@keyframes ringPop{
+  to{transform:translate(-50%,-50%) scale(1);}
+}
+
+/* 🎆 fireworks dots */
+.fire{
+  position:fixed;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#ff4d88;
+  animation:blast 1s ease-out forwards;
+}
+@keyframes blast{
+  to{
+    transform:translate(var(--x),var(--y));
+    opacity:0;
+  }
 }
 </style>
 </head>
@@ -99,7 +111,7 @@ button{
 <!-- PROPOSAL -->
 <div class="card hidden" id="proposal" onclick="playMusicOnce()">
 
-  <h1 class="typing">RIYA JI HUN DEO JWBB 💖</h1>
+  <h1>RIYA JI HUN DEO JWBB 💖</h1>
 
   <p>TAHNU MIL KE ZINDAGI SAFAL HOGI ❤️</p>
   <p>I LOVE U JI & THNKU JI FROM NAVI JI 👀❤️🫠</p>
@@ -116,7 +128,6 @@ button{
 <script>
 let musicPlayed=false;
 
-/* play only once on first tap */
 function playMusicOnce(){
   if(!musicPlayed){
     document.getElementById("song").play().catch(()=>{});
@@ -124,7 +135,6 @@ function playMusicOnce(){
   }
 }
 
-/* password */
 function checkPass(e){
   e.stopPropagation();
   if(document.getElementById("pass").value === "21012026"){
@@ -143,17 +153,34 @@ function createStars(){
     s.className="star";
     s.style.left=Math.random()*100+"vw";
     s.style.top=Math.random()*100+"vh";
-    s.style.animationDuration=(1+Math.random()*2)+"s";
     document.body.appendChild(s);
   }
 }
 
-/* YES */
+/* YES click → fireworks + ring */
 function acceptLove(){
   document.getElementById("loveMsg").style.display="block";
+
+  /* ring */
+  let ring=document.createElement("div");
+  ring.id="ring";
+  ring.innerHTML="💍";
+  document.body.appendChild(ring);
+
+  /* fireworks */
+  for(let i=0;i<40;i++){
+    let f=document.createElement("div");
+    f.className="fire";
+    f.style.left="50%";
+    f.style.top="50%";
+    f.style.setProperty("--x",(Math.random()*300-150)+"px");
+    f.style.setProperty("--y",(Math.random()*300-150)+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
 }
 
-/* NO button bhaage */
+/* NO bhaage */
 function moveNo(){
   let btn=document.getElementById("noBtn");
   btn.style.position="absolute";
