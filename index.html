@@ -1,115 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>For Riya Ji ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Riya Ji 💖</title>
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #ffd6e7, #ffeef5);
-      font-family: Arial, sans-serif;
-      text-align: center;
-      overflow: hidden;
-    }
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#ff9eb5,#ffc0cb,#ffd6e0);
+  overflow:hidden;
+}
 
-    .box {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.1);
-      max-width: 340px;
-      position: relative;
-    }
+/* card */
+.card{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,0,90,0.35);
+  width:88%;
+  max-width:370px;
+  animation:fadeIn 1.5s ease;
+}
 
-    h1 { color: #ff3366; margin-bottom: 10px; }
-    p  { font-size: 16px; color: #444; }
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.85);}
+  to{opacity:1; transform:scale(1);}
+}
 
-    button {
-      padding: 12px 25px;
-      font-size: 16px;
-      margin: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      position: relative;
-    }
+/* hidden */
+.hidden{display:none;}
 
-    .yes { background: #ff3366; color: white; }
-    .no  { background: gray; color: white; position: absolute; }
+/* heading glow */
+h1{
+  color:#ff2e63;
+  text-shadow:0 0 12px #ff8fab;
+}
 
-    .heart {
-      position: fixed;
-      bottom: -20px;
-      font-size: 24px;
-      animation: floatUp 4s linear infinite;
-    }
+/* buttons */
+button{
+  margin-top:14px;
+  padding:11px 24px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  background:#ff2e63;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{transform:scale(1.08);}
 
-    @keyframes floatUp {
-      from { transform: translateY(0); opacity: 1; }
-      to   { transform: translateY(-100vh); opacity: 0; }
-    }
-  </style>
+/* love message */
+#loveMsg{
+  display:none;
+  font-size:21px;
+  color:#ff0055;
+  margin-top:15px;
+  animation:fadeIn 1s ease;
+}
+
+/* floating hearts */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  animation:float 6s linear infinite;
+  font-size:20px;
+}
+@keyframes float{
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-110vh);opacity:0;}
+}
+</style>
 </head>
 
-<body onclick="startMusic()">
+<body onclick="playMusic()">
 
-  <!-- 🎵 Background Music -->
-  <audio id="bgMusic" loop>
-    <source src="song.mp3" type="audio/mpeg">
-  </audio>
+<!-- MUSIC -->
+<audio id="song" loop>
+  <source src="song.mp3" type="audio/mp3">
+</audio>
 
-  <div class="box">
+<!-- PASSWORD SCREEN -->
+<div class="card" id="login">
+  <h2>Enter Secret Password 🔐</h2>
+  <input type="password" id="pass" placeholder="Password">
+  <br><br>
+  <button onclick="checkPass()">Open 💖</button>
+</div>
 
-    <!-- 🔥 TERE WORDS -->
-    <h1>RIYA JI HUN DEO JWBB 💖</h1>
+<!-- PROPOSAL -->
+<div class="card hidden" id="proposal">
 
-    <p>
-      TAHNU MIL KE ZINDAGI SAFAL HOGI ❤️<br><br>
-      I LOVE U JI & THNKU JI FROM NAVI JI 👀❤️🫠
-    </p>
+  <h1>RIYA JI HUN DEO JWBB 💖</h1>
 
-    <button class="yes" onclick="showLove()">YES</button>
-    <button class="no" id="noBtn">NO</button>
+  <p>TAHNU MIL KE ZINDAGI SAFAL HOGI ❤️</p>
+  <p>I LOVE U JI & THNKU JI FROM NAVI JI 👀❤️🫠</p>
+
+  <button onclick="acceptLove()">YES</button>
+
+  <div id="loveMsg">
+    I LOVE U JI ❤️❤️🤫 <br>
+    WILL YOU BE MY GIRLFRIEND ❤️🫠👀
   </div>
+</div>
 
-  <script>
-    const music = document.getElementById("bgMusic");
-    const noBtn = document.getElementById("noBtn");
+<script>
+function playMusic(){
+  document.getElementById("song").play().catch(()=>{});
+}
 
-    function startMusic() {
-      music.play();
-    }
+/* PASSWORD */
+function checkPass(){
+  if(document.getElementById("pass").value === "21-01-2026"){
+    document.getElementById("login").style.display="none";
+    document.getElementById("proposal").classList.remove("hidden");
+  }else{
+    alert("Wrong Password 😢");
+  }
+}
 
-    // NO button bhagega
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - 80);
-      const y = Math.random() * (window.innerHeight - 40);
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-    });
+/* YES CLICK */
+function acceptLove(){
+  document.getElementById("loveMsg").style.display="block";
 
-    // YES dabate hi message + hearts
-    function showLove() {
-      music.play();
+  for(let i=0;i<35;i++){
+    let h=document.createElement("div");
+    h.innerHTML="💖";
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(15+Math.random()*25)+"px";
+    h.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(h);
 
-      alert("I LOVE U JI ❤️❤️🤫\n\nWILL YOU BE MY GIRLFRIEND ❤️🫠👀");
-
-      for (let i = 0; i < 50; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (2 + Math.random() * 3) + "s";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
-      }
-    }
-  </script>
+    setTimeout(()=>{h.remove()},6000);
+  }
+}
+</script>
 
 </body>
 </html>
