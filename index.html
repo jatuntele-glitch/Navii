@@ -11,13 +11,13 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family: 'Segoe UI', sans-serif;
+  font-family:'Segoe UI',sans-serif;
   background:black;
   overflow:hidden;
   color:white;
 }
 
-/* ⭐ stars */
+/* stars */
 .star{
   position:fixed;
   width:2px;
@@ -32,7 +32,7 @@ body{
 
 /* glass card */
 .card{
-  backdrop-filter: blur(15px);
+  backdrop-filter:blur(15px);
   background:rgba(255,255,255,0.08);
   border-radius:20px;
   padding:30px;
@@ -45,7 +45,7 @@ body{
 /* hidden */
 .hidden{display:none;}
 
-/* typing text */
+/* typing */
 .typing{
   border-right:2px solid pink;
   white-space:nowrap;
@@ -53,22 +53,26 @@ body{
   width:0;
   animation:typing 4s steps(30,end) forwards;
 }
-@keyframes typing{
-  to{width:100%;}
-}
+@keyframes typing{to{width:100%;}}
 
-/* button */
+/* buttons */
 button{
-  margin-top:15px;
-  padding:12px 25px;
+  margin-top:12px;
+  padding:12px 22px;
   border:none;
   border-radius:12px;
   background:#ff2e63;
   color:white;
   font-size:16px;
+  cursor:pointer;
 }
 
-/* final msg */
+/* NO button moving */
+#noBtn{
+  position:relative;
+}
+
+/* love msg */
 #loveMsg{
   display:none;
   font-size:22px;
@@ -78,22 +82,22 @@ button{
 </style>
 </head>
 
-<body onclick="playMusic()">
+<body>
 
 <audio id="song" loop>
   <source src="song.mp3" type="audio/mp3">
 </audio>
 
 <!-- PASSWORD -->
-<div class="card" id="login">
+<div class="card" id="login" onclick="playMusicOnce()">
   <h2>Enter Secret Password 🔐</h2>
   <input type="password" id="pass">
   <br><br>
-  <button onclick="checkPass()">Open 💖</button>
+  <button onclick="checkPass(event)">Open 💖</button>
 </div>
 
 <!-- PROPOSAL -->
-<div class="card hidden" id="proposal">
+<div class="card hidden" id="proposal" onclick="playMusicOnce()">
 
   <h1 class="typing">RIYA JI HUN DEO JWBB 💖</h1>
 
@@ -101,6 +105,7 @@ button{
   <p>I LOVE U JI & THNKU JI FROM NAVI JI 👀❤️🫠</p>
 
   <button onclick="acceptLove()">YES</button>
+  <button id="noBtn" onmouseover="moveNo()">NO 😜</button>
 
   <div id="loveMsg">
     I LOVE U JI ❤️❤️🤫 <br>
@@ -109,13 +114,20 @@ button{
 </div>
 
 <script>
-function playMusic(){
-  document.getElementById("song").play().catch(()=>{});
+let musicPlayed=false;
+
+/* play only once on first tap */
+function playMusicOnce(){
+  if(!musicPlayed){
+    document.getElementById("song").play().catch(()=>{});
+    musicPlayed=true;
+  }
 }
 
 /* password */
-function checkPass(){
-  if(document.getElementById("pass").value === "21-01-2026"){
+function checkPass(e){
+  e.stopPropagation();
+  if(document.getElementById("pass").value === "21012026"){
     document.getElementById("login").style.display="none";
     document.getElementById("proposal").classList.remove("hidden");
     createStars();
@@ -136,9 +148,17 @@ function createStars(){
   }
 }
 
-/* yes */
+/* YES */
 function acceptLove(){
   document.getElementById("loveMsg").style.display="block";
+}
+
+/* NO button bhaage */
+function moveNo(){
+  let btn=document.getElementById("noBtn");
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
 }
 </script>
 
