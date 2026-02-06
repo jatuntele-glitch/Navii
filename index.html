@@ -45,14 +45,14 @@
   </style>
 </head>
 
-<body onclick="startMusic()">
+<body>
 
-  <!-- 🎵 Background Music -->
+  <!-- 🎵 Music -->
   <audio id="bgMusic" loop>
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
-  <h1>Riya Ji, Will You Be Mine? 💖</h1>
+  <h1 onclick="playMusic()">Riya Ji, Will You Be Mine? 💖</h1>
   <p>You are the most special person in my life ❤️</p>
 
   <button class="yes" onclick="showLove()">Yes</button>
@@ -62,8 +62,8 @@
     const music = document.getElementById("bgMusic");
     const noBtn = document.getElementById("noBtn");
 
-    // Start music on first tap (mobile fix)
-    function startMusic() {
+    // Tap anywhere on title to start music (mobile fix)
+    function playMusic() {
       music.play();
     }
 
@@ -75,8 +75,9 @@
       noBtn.style.top = y + "px";
     });
 
-    // Hearts animation on YES
+    // Hearts on YES
     function showLove() {
+      music.play(); // ensure music plays
       alert("Yay! I love you Riya Ji ❤️");
 
       for (let i = 0; i < 40; i++) {
