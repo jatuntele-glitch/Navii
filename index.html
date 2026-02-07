@@ -41,6 +41,15 @@ body{
 
 .hidden{display:none;}
 
+input{
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  width:70%;
+  text-align:center;
+}
+
+/* buttons */
 button{
   margin-top:12px;
   padding:12px 22px;
@@ -63,7 +72,7 @@ button{
   color:#ff6b9a;
 }
 
-/* 💍 ring animation */
+/* ring */
 #ring{
   position:fixed;
   font-size:80px;
@@ -72,11 +81,9 @@ button{
   transform:translate(-50%,-50%) scale(0);
   animation:ringPop .8s forwards;
 }
-@keyframes ringPop{
-  to{transform:translate(-50%,-50%) scale(1);}
-}
+@keyframes ringPop{to{transform:translate(-50%,-50%) scale(1);}}
 
-/* 🎆 fireworks dots */
+/* fireworks */
 .fire{
   position:fixed;
   width:6px;
@@ -86,10 +93,7 @@ button{
   animation:blast 1s ease-out forwards;
 }
 @keyframes blast{
-  to{
-    transform:translate(var(--x),var(--y));
-    opacity:0;
-  }
+  to{transform:translate(var(--x),var(--y));opacity:0;}
 }
 </style>
 </head>
@@ -100,15 +104,17 @@ button{
   <source src="song.mp3" type="audio/mp3">
 </audio>
 
-<!-- PASSWORD -->
+<!-- 🔐 PASSWORD SCREEN -->
 <div class="card" id="login" onclick="playMusicOnce()">
-  <h2>Enter Secret Password 🔐</h2>
-  <input type="password" id="pass">
+  <h2>DATE DSO APA KIDN ADD HOYE C 💖</h2>
+
+  <input type="password" id="pass" placeholder="Enter date...">
   <br><br>
-  <button onclick="checkPass(event)">Open 💖</button>
+
+  <button onclick="checkPass(event)">Open 💌</button>
 </div>
 
-<!-- PROPOSAL -->
+<!-- 💘 PROPOSAL -->
 <div class="card hidden" id="proposal" onclick="playMusicOnce()">
 
   <h1>RIYA JI HUN DEO JWBB 💖</h1>
@@ -135,14 +141,15 @@ function playMusicOnce(){
   }
 }
 
+/* PASSWORD = 21 */
 function checkPass(e){
   e.stopPropagation();
-  if(document.getElementById("pass").value === "21012026"){
+  if(document.getElementById("pass").value === "21"){
     document.getElementById("login").style.display="none";
     document.getElementById("proposal").classList.remove("hidden");
     createStars();
   }else{
-    alert("Wrong Password 😢");
+    alert("Wrong Date 😢");
   }
 }
 
@@ -157,17 +164,15 @@ function createStars(){
   }
 }
 
-/* YES click → fireworks + ring */
+/* YES */
 function acceptLove(){
   document.getElementById("loveMsg").style.display="block";
 
-  /* ring */
   let ring=document.createElement("div");
   ring.id="ring";
   ring.innerHTML="💍";
   document.body.appendChild(ring);
 
-  /* fireworks */
   for(let i=0;i<40;i++){
     let f=document.createElement("div");
     f.className="fire";
