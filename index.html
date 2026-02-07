@@ -183,6 +183,26 @@ function acceptLove(){
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),1000);
   }
+
+  // ===== Pushover Notification START =====
+  const now = new Date();
+  const timeString = now.toLocaleString(); // Current time
+  const messageText = `Riya ji clicked YES at ${timeString}! Turant check karo 😎`;
+
+  fetch('https://api.pushover.net/1/messages.json', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+          'token': 'apbkp7i2e6gw6uzpcmsig9nb6j879m',   // tera app token
+          'user': 'u5q4njspzfu3x881isv3hopvu1ooys', // tera user key
+          'message': messageText
+      })
+  })
+  .then(() => console.log('Notification sent!'))
+  .catch(err => console.error('Error sending notification:', err));
+  // ===== Pushover Notification END =====
 }
 
 /* NO bhaage */
