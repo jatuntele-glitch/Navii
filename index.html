@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Riya Ji 💖</title>
 
@@ -70,6 +71,7 @@ button{
   font-size:22px;
   margin-top:15px;
   color:#ff6b9a;
+  text-shadow:0 0 10px #ff6b9a;
 }
 
 /* ring */
@@ -95,6 +97,14 @@ button{
 @keyframes blast{
   to{transform:translate(var(--x),var(--y));opacity:0;}
 }
+
+/* emoji */
+.emoji{
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  font-size:16px;
+}
 </style>
 </head>
 
@@ -107,18 +117,14 @@ button{
 <!-- 🔐 PASSWORD SCREEN -->
 <div class="card" id="login" onclick="playMusicOnce()">
   <h2>DATE DSO APA KIDN ADD HOYE C 💖</h2>
-
   <input type="password" id="pass" placeholder="Enter date...">
   <br><br>
-
   <button onclick="checkPass(event)">Open 💌</button>
 </div>
 
 <!-- 💘 PROPOSAL -->
 <div class="card hidden" id="proposal" onclick="playMusicOnce()">
-
   <h1>RIYA JI HUN DEO JWBB 💖</h1>
-
   <p>TAHNU MIL KE ZINDAGI SAFAL HOGI ❤️</p>
   <p>I LOVE U JI & THNKU JI FROM NAVI JI 👀❤️🫠</p>
 
@@ -164,30 +170,61 @@ function createStars(){
   }
 }
 
+/* emoji rain */
+function emojiRain(){
+  const emojis = ["❤️","💖","💍","😍","🥰"];
+  for(let i=0;i<30;i++){
+    let e=document.createElement("div");
+    e.className="emoji";
+    e.style.fontSize = (10 + Math.random()*25) + "px";
+    e.style.left = Math.random()*100 + "vw";
+    e.style.top = "-2vh";
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    document.body.appendChild(e);
+
+    let fall = setInterval(()=>{
+      let top = parseFloat(e.style.top);
+      if(top > 100){ 
+        e.remove(); 
+        clearInterval(fall);
+      } else {
+        e.style.top = (top + Math.random()*3 + Math.random()*2) + "vh";
+      }
+    },16);
+  }
+}
+
 /* YES */
 function acceptLove(){
   document.getElementById("loveMsg").style.display="block";
 
+  // Ring 💍
   let ring=document.createElement("div");
   ring.id="ring";
   ring.innerHTML="💍";
   document.body.appendChild(ring);
 
-  for(let i=0;i<40;i++){
+  // Fireworks
+  for(let i=0;i<50;i++){
     let f=document.createElement("div");
     f.className="fire";
     f.style.left="50%";
     f.style.top="50%";
-    f.style.setProperty("--x",(Math.random()*300-150)+"px");
-    f.style.setProperty("--y",(Math.random()*300-150)+"px");
+    f.style.setProperty("--x",(Math.random()*400-200)+"px");
+    f.style.setProperty("--y",(Math.random()*400-200)+"px");
     document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1000);
+    setTimeout(()=>f.remove(),1200);
+  }
+
+  // Emoji Rain multiple bursts
+  for(let i=0;i<5;i++){
+    setTimeout(()=>emojiRain(), i*200);
   }
 
   // ===== Pushover Notification START =====
   const now = new Date();
-  const timeString = now.toLocaleString(); // Current time
-  const messageText = `Riya ji clicked YES at ${timeString}! Turant check karo 😎`;
+  const timeString = now.toLocaleString();
+  const messageText = `💖 Riya ji clicked YES at ${timeString}! Turant check karo 😎💍`;
 
   fetch('https://api.pushover.net/1/messages.json', {
       method: 'POST',
@@ -195,12 +232,14 @@ function acceptLove(){
           'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
-          'token': 'apbkp7i2e6gw6uzpcmsig9nb6j879m',   // tera app token
-          'user': 'u5q4njspzfu3x881isv3hopvu1ooys', // tera user key
-          'message': messageText
+          'token': 'apbkp7i2e6gw6uzpcmsig9nb6j879m',
+          'user': 'u5q4njspzfu3x881isv3hopvu1ooys',
+          'message': messageText,
+          'priority': '1',
+          'sound': 'magic'
       })
   })
-  .then(() => console.log('Notification sent!'))
+  .then(() => console.log('Notification sent! 🎉'))
   .catch(err => console.error('Error sending notification:', err));
   // ===== Pushover Notification END =====
 }
