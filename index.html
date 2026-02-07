@@ -72,7 +72,9 @@ button{
   margin-top:15px;
   color:#ff6b9a;
   text-shadow:0 0 10px #ff6b9a;
+  animation:fadeIn 1s forwards;
 }
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
 /* ring */
 #ring{
@@ -91,11 +93,10 @@ button{
   width:6px;
   height:6px;
   border-radius:50%;
-  background:#ff4d88;
   animation:blast 1s ease-out forwards;
 }
 @keyframes blast{
-  to{transform:translate(var(--x),var(--y));opacity:0;}
+  to{transform:translate(var(--x),var(--y)) rotate(720deg);opacity:0;}
 }
 
 /* emoji */
@@ -105,6 +106,44 @@ button{
   z-index:9999;
   font-size:16px;
 }
+
+/* hearts */
+.heart{
+  position:fixed;
+  font-size:20px;
+  color:#ff4d88;
+  pointer-events:none;
+  animation:heartFall 4s linear forwards;
+}
+@keyframes heartFall{
+  0%{opacity:1; transform:translateY(0) rotate(0deg);}
+  100%{opacity:0; transform:translateY(100vh) rotate(360deg);}
+}
+
+/* confetti */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  pointer-events:none;
+  border-radius:50%;
+  background:hsl(var(--h),100%,50%);
+  animation:confettiFall 3s linear forwards;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(100vh) rotate(720deg); opacity:0;}
+}
+
+/* screen shake */
+@keyframes shake{
+  0%{transform:translate(0);}
+  25%{transform:translate(10px, -5px);}
+  50%{transform:translate(-10px,5px);}
+  75%{transform:translate(5px,-5px);}
+  100%{transform:translate(0);}
+}
+.shake{animation:shake 0.6s;}
 </style>
 </head>
 
@@ -161,7 +200,7 @@ function checkPass(e){
 
 /* stars */
 function createStars(){
-  for(let i=0;i<80;i++){
+  for(let i=0;i<120;i++){
     let s=document.createElement("div");
     s.className="star";
     s.style.left=Math.random()*100+"vw";
@@ -172,11 +211,11 @@ function createStars(){
 
 /* emoji rain */
 function emojiRain(){
-  const emojis = ["❤️","💖","💍","😍","🥰"];
-  for(let i=0;i<30;i++){
+  const emojis = ["❤️","💖","💍","😍","🥰","🥳"];
+  for(let i=0;i<40;i++){
     let e=document.createElement("div");
     e.className="emoji";
-    e.style.fontSize = (10 + Math.random()*25) + "px";
+    e.style.fontSize = (10 + Math.random()*35) + "px";
     e.style.left = Math.random()*100 + "vw";
     e.style.top = "-2vh";
     e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
@@ -188,15 +227,42 @@ function emojiRain(){
         e.remove(); 
         clearInterval(fall);
       } else {
-        e.style.top = (top + Math.random()*3 + Math.random()*2) + "vh";
+        e.style.top = (top + Math.random()*5 + Math.random()*2) + "vh";
       }
     },16);
+  }
+}
+
+/* hearts rain */
+function heartRain(){
+  for(let i=0;i<35;i++){
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.fontSize = (15 + Math.random()*30)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  }
+}
+
+/* confetti */
+function confettiRain(){
+  for(let i=0;i<50;i++){
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*100+"vw";
+    c.style.setProperty("--h", Math.random()*360);
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
   }
 }
 
 /* YES */
 function acceptLove(){
   document.getElementById("loveMsg").style.display="block";
+  document.body.classList.add('shake');
+
+  setTimeout(()=>document.body.classList.remove('shake'),600);
 
   // Ring 💍
   let ring=document.createElement("div");
@@ -204,31 +270,32 @@ function acceptLove(){
   ring.innerHTML="💍";
   document.body.appendChild(ring);
 
-  // Fireworks
-  for(let i=0;i<50;i++){
+  // Fireworks rainbow
+  for(let i=0;i<80;i++){
     let f=document.createElement("div");
     f.className="fire";
     f.style.left="50%";
     f.style.top="50%";
-    f.style.setProperty("--x",(Math.random()*400-200)+"px");
-    f.style.setProperty("--y",(Math.random()*400-200)+"px");
+    f.style.setProperty("--x",(Math.random()*600-300)+"px");
+    f.style.setProperty("--y",(Math.random()*600-300)+"px");
+    f.style.background=`hsl(${Math.random()*360},100%,70%)`;
     document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1200);
+    setTimeout(()=>f.remove(),1500);
   }
 
-  // Emoji Rain multiple bursts
-  for(let i=0;i<5;i++){
+  // Emoji, hearts, confetti multiple bursts
+  for(let i=0;i<6;i++){
     setTimeout(()=>emojiRain(), i*200);
+    setTimeout(()=>heartRain(), i*250);
+    setTimeout(()=>confettiRain(), i*300);
   }
 
-  // ===== Pushover Notification START =====
+  // ===== Pushover Notification =====
   const messageText = `NAVII JI BNGYI GAL RIYA JI NE KRTI HAAA 🙂‍↔️❤️❤️`;
 
   fetch('https://api.pushover.net/1/messages.json', {
       method: 'POST',
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: new URLSearchParams({
           'token': 'apbkp7i2e6gw6uzpcmsig9nb6j879m',
           'user': 'u5q4njspzfu3x881isv3hopvu1ooys',
@@ -237,17 +304,16 @@ function acceptLove(){
           'sound': 'magic'
       })
   })
-  .then(() => console.log('Notification sent! 🎉'))
-  .catch(err => console.error('Error sending notification:', err));
-  // ===== Pushover Notification END =====
+  .then(()=>console.log('Notification sent! 🎉'))
+  .catch(err=>console.error('Error sending notification:', err));
 }
 
-/* NO bhaage */
+/* NO button crazy move */
 function moveNo(){
   let btn=document.getElementById("noBtn");
   btn.style.position="absolute";
-  btn.style.left=Math.random()*80+"%";
-  btn.style.top=Math.random()*80+"%";
+  btn.style.left=Math.random()*85+"%";
+  btn.style.top=Math.random()*85+"%";
 }
 </script>
 
